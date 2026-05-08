@@ -294,6 +294,65 @@
   font-weight:600;
   letter-spacing:1px;
 }
+/* Articles Section Styles */
+.articles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.article-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid #eee;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.article-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+}
+
+.category {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #6c63ff; /* Your theme purple */
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.article-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    color: #222;
+}
+
+.article-card p {
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    flex-grow: 1;
+}
+
+.article-link {
+    font-weight: bold;
+    color: #222;
+    text-decoration: none;
+    border-bottom: 2px solid #6c63ff;
+    padding-bottom: 2px;
+}
+
+.article-link:hover {
+    color: #6c63ff;
+}
 
 
     /* ================= CLEAN MOBILE FIX ================= */
