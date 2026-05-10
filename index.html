@@ -856,6 +856,488 @@
   emailjs.init("hQFDWCQCi0LAtJgGz");
 </script>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Articles — Speak Kind Campaign</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --purple: #5A189A;
+      --dark: #2B2B2B;
+      --red: #E63946;
+      --blue: #A8DADC;
+      --pink: #FFCAD4;
+      --green: #95D5B2;
+      --dark-green: #2D6A4F;
+      --yellow: #FFD166;
+      --beige: #F8F9FA;
+      --white: #FFFFFF;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Montserrat', sans-serif; background: var(--dark); color: var(--white); overflow-x: hidden; cursor: none; }
+
+    .cursor { width: 12px; height: 12px; background: var(--yellow); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; mix-blend-mode: difference; }
+    .cursor-ring { width: 36px; height: 36px; border: 2px solid var(--yellow); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998; transition: all 0.18s ease; mix-blend-mode: difference; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 20px 60px; display: flex; align-items: center; justify-content: space-between; background: rgba(43,43,43,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .nav-logo { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: var(--white); text-decoration: none; }
+    .nav-logo span { color: var(--yellow); }
+    .nav-links { display: flex; gap: 40px; list-style: none; }
+    .nav-links a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 12px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; transition: color 0.2s; cursor: none; }
+    .nav-links a:hover { color: var(--yellow); }
+    .nav-links a.active { color: var(--yellow); }
+
+    /* HERO */
+    .hero {
+      min-height: 52vh;
+      background: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 140px 60px 80px;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(90,24,154,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(90,24,154,0.07) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-blob { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.14; }
+    .b1 { width: 460px; height: 460px; background: var(--purple); top: -120px; right: -80px; }
+    .b2 { width: 320px; height: 320px; background: var(--pink); bottom: -80px; left: -60px; }
+    .hero-content { position: relative; z-index: 2; max-width: 760px; }
+    .hero-tag { display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: 5px; color: var(--yellow); text-transform: uppercase; margin-bottom: 24px; padding: 7px 18px; border: 1px solid rgba(255,209,102,0.3); border-radius: 100px; }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(40px, 6vw, 76px); font-weight: 900; line-height: 1.05; letter-spacing: -2px; margin-bottom: 20px; }
+    .hero h1 em { font-style: italic; color: var(--purple); }
+    .hero p { font-size: 15px; font-weight: 300; color: rgba(255,255,255,0.5); line-height: 1.9; max-width: 540px; margin: 0 auto; }
+
+    /* FILTER TABS */
+    .filter-bar {
+      background: rgba(255,255,255,0.03);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 20px 60px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 10px 24px;
+      border-radius: 100px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: transparent;
+      color: rgba(255,255,255,0.5);
+      cursor: none;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+    .filter-btn.active { background: var(--purple); border-color: var(--purple); color: var(--white); }
+
+    /* ARTICLES GRID */
+    .articles-section { padding: 80px 60px 120px; max-width: 1300px; margin: 0 auto; }
+
+    .category-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .category-label::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+
+    .articles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin-bottom: 72px;
+    }
+
+    .article-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+      text-decoration: none;
+      color: inherit;
+      cursor: none;
+    }
+    .article-card:hover { transform: translateY(-6px); border-color: rgba(255,255,255,0.18); box-shadow: 0 20px 50px rgba(0,0,0,0.35); }
+
+    .card-top {
+      height: 10px;
+      flex-shrink: 0;
+    }
+    .top-body { background: linear-gradient(90deg, var(--red), var(--purple)); }
+    .top-social { background: linear-gradient(90deg, var(--blue), var(--pink)); }
+
+    .card-body { padding: 28px; flex: 1; display: flex; flex-direction: column; }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .card-tag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+    .tag-body { background: rgba(230,57,70,0.15); color: #ff6b7a; }
+    .tag-social { background: rgba(168,218,220,0.15); color: var(--blue); }
+    .card-source { font-size: 11px; color: rgba(255,255,255,0.3); font-weight: 600; }
+    .card-year { font-size: 11px; color: rgba(255,255,255,0.25); margin-left: auto; }
+
+    .card-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 19px;
+      font-weight: 700;
+      line-height: 1.35;
+      color: var(--white);
+      margin-bottom: 14px;
+      flex: 1;
+    }
+
+    .card-body p {
+      font-size: 13px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.75;
+      margin-bottom: 24px;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .read-link {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--yellow);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .read-link::after { content: '→'; transition: transform 0.2s; }
+    .article-card:hover .read-link::after { transform: translateX(4px); }
+    .read-type { font-size: 10px; color: rgba(255,255,255,0.25); font-weight: 600; letter-spacing: 1px; }
+
+    /* FEATURED STAT STRIP */
+    .stat-strip {
+      background: var(--purple);
+      padding: 56px 60px;
+      display: flex;
+      justify-content: center;
+      gap: 80px;
+      flex-wrap: wrap;
+    }
+    .strip-stat { text-align: center; }
+    .strip-num { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 900; color: var(--yellow); display: block; }
+    .strip-label { font-size: 12px; font-weight: 400; color: rgba(255,255,255,0.6); letter-spacing: 2px; margin-top: 6px; max-width: 180px; display: block; line-height: 1.5; }
+
+    /* BOTTOM CTA */
+    .bottom-cta {
+      background: var(--beige);
+      padding: 100px 60px;
+      text-align: center;
+    }
+    .bottom-cta h2 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 4vw, 52px); font-weight: 900; color: var(--dark); margin-bottom: 16px; }
+    .bottom-cta h2 em { font-style: italic; color: var(--purple); }
+    .bottom-cta p { font-size: 15px; font-weight: 300; color: #777; line-height: 1.8; max-width: 520px; margin: 0 auto 40px; }
+    .cta-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-dark { padding: 15px 36px; background: var(--dark); color: var(--white); font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border-radius: 4px; text-decoration: none; transition: all 0.25s; cursor: none; display: inline-block; }
+    .btn-dark:hover { background: var(--purple); transform: translateY(-2px); }
+    .btn-ghost { padding: 15px 36px; background: transparent; color: var(--dark); font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid rgba(0,0,0,0.2); border-radius: 4px; text-decoration: none; transition: all 0.25s; cursor: none; display: inline-block; }
+    .btn-ghost:hover { border-color: var(--dark); transform: translateY(-2px); }
+
+    /* FOOTER */
+    footer { background: #1a1a1a; padding: 40px 60px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.06); }
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 900; color: var(--white); }
+    .footer-logo span { color: var(--yellow); }
+    footer p { font-size: 12px; color: rgba(255,255,255,0.3); }
+
+    /* ANIMATIONS */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--dark); }
+    ::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 2px; }
+
+    @media (max-width: 960px) {
+      nav { padding: 16px 24px; }
+      .nav-links { gap: 20px; }
+      .hero { padding: 120px 24px 60px; }
+      .articles-section { padding: 60px 24px 80px; }
+      .articles-grid { grid-template-columns: 1fr; }
+      .stat-strip { gap: 40px; padding: 48px 24px; }
+      .bottom-cta { padding: 60px 24px; }
+      footer { flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">Speak<span>Kind</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#posters">Posters</a></li>
+    <li><a href="articles.html" class="active">Articles</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-blob b1"></div>
+  <div class="hero-blob b2"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Research & Reading</div>
+    <h1>The evidence<br>behind the <em>pain.</em></h1>
+    <p>Real research, real sources. Every article here is published by credible institutions and researchers — because body shaming isn't just hurtful, it's a documented crisis.</p>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filterCards('all', this)">All Articles</button>
+  <button class="filter-btn" onclick="filterCards('body', this)">Body Shaming Effects</button>
+  <button class="filter-btn" onclick="filterCards('social', this)">Social Media & Body Image</button>
+</div>
+
+<!-- ARTICLES -->
+<div class="articles-section">
+
+  <!-- BODY SHAMING EFFECTS -->
+  <div class="category-label reveal" style="color: #ff6b7a;">Body Shaming Effects</div>
+  <div class="articles-grid">
+
+    <a class="article-card reveal" href="https://www.psychologytoday.com/us/blog/your-brain-on-body-dysmorphia/202407/the-hidden-impact-of-body-shaming-and-self" target="_blank" rel="noopener" data-cat="body">
+      <div class="card-top top-body"></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-tag tag-body">Body Shaming</span>
+          <span class="card-source">Psychology Today</span>
+          <span class="card-year">2024</span>
+        </div>
+        <h3>The Hidden Impact of Body Shaming and Self-Objectification</h3>
+        <p>People who experience body shaming are statistically more likely to develop depression, anxiety, and disordered eating. This article unpacks how the media and social environments reinforce these harmful cycles.</p>
+        <div class="card-footer">
+          <span class="read-link">Read Article</span>
+          <span class="read-type">psychologytoday.com</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="article-card reveal" href="https://neurolaunch.com/psychological-effects-of-body-shaming" target="_blank" rel="noopener" data-cat="body">
+      <div class="card-top top-body"></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-tag tag-body">Mental Health</span>
+          <span class="card-source">NeuroLaunch</span>
+          <span class="card-year">2024</span>
+        </div>
+        <h3>Body Shaming's Psychological Impact: Long-Term Effects on Mental Health</h3>
+        <p>From shattered self-esteem to lasting anxiety, this in-depth piece explores how criticism of appearance plants seeds of insecurity that can grow for years — affecting every aspect of a person's life.</p>
+        <div class="card-footer">
+          <span class="read-link">Read Article</span>
+          <span class="read-type">neurolaunch.com</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="article-card reveal" href="https://www.medicalnewstoday.com/articles/effects-of-fat-shaming" target="_blank" rel="noopener" data-cat="body">
+      <div class="card-top top-body"></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-tag tag-body">Weight Stigma</span>
+          <span class="card-source">Medical News Today</span>
+          <span class="card-year">2024</span>
+        </div>
+        <h3>Fatphobia and the Health Effects of Fat Shaming</h3>
+        <p>Weight-based shaming lowers self-esteem, fuels anxiety, and increases risk of depression. A 2023 study of 2,707 college students found those who experienced weight stigma were significantly more likely to report severe mental health symptoms.</p>
+        <div class="card-footer">
+          <span class="read-link">Read Article</span>
+          <span class="read-type">medicalnewstoday.com</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- SOCIAL MEDIA & BODY IMAGE -->
+  <div class="category-label reveal" style="color: var(--blue);">Social Media & Body Image</div>
+  <div class="articles-grid">
+
+    <a class="article-card reveal" href="https://childmind.org/article/how-using-social-media-affects-teenagers/" target="_blank" rel="noopener" data-cat="social">
+      <div class="card-top top-social"></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-tag tag-social">Social Media</span>
+          <span class="card-source">Child Mind Institute</span>
+          <span class="card-year">2026</span>
+        </div>
+        <h3>Effects of Social Media on Teenagers' Mental Health</h3>
+        <p>Social media encourages constant comparison and limits real-world connection — leading to increased depression, anxiety, poor body image, and loneliness. A trusted resource updated with the latest research.</p>
+        <div class="card-footer">
+          <span class="read-link">Read Article</span>
+          <span class="read-type">childmind.org</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="article-card reveal" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11103119/" target="_blank" rel="noopener" data-cat="social">
+      <div class="card-top top-social"></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-tag tag-social">Peer-Reviewed</span>
+          <span class="card-source">PMC / Cureus</span>
+          <span class="card-year">2024</span>
+        </div>
+        <h3>Social Media Effects on Eating Disorders and Body Image in Young Adolescents</h3>
+        <p>Instagram and TikTok expose teens to unachievable beauty ideals, driving body dissatisfaction and binge eating disorder patterns. This study examines how influencer culture normalises harmful behaviours.</p>
+        <div class="card-footer">
+          <span class="read-link">Read Article</span>
+          <span class="read-type">ncbi.nlm.nih.gov</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="article-card reveal" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11229793/" target="_blank" rel="noopener" data-cat="social">
+      <div class="card-top top-social"></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-tag tag-social">Interventions</span>
+          <span class="card-source">PMC / NIH</span>
+          <span class="card-year">2024</span>
+        </div>
+        <h3>Mitigating Harms of Social Media for Adolescent Body Image</h3>
+        <p>Adolescents won't stop using social media — so how do we make it safer? This review covers interventions, the body-positivity movement, and policies that could protect young people online.</p>
+        <div class="card-footer">
+          <span class="read-link">Read Article</span>
+          <span class="read-type">pmc.ncbi.nlm.nih.gov</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- STAT STRIP -->
+<div class="stat-strip">
+  <div class="strip-stat reveal">
+    <span class="strip-num">31%</span>
+    <span class="strip-label">of teenagers feel depressed because of their body image</span>
+  </div>
+  <div class="strip-stat reveal">
+    <span class="strip-num">20%+</span>
+    <span class="strip-label">of social media users report body image issues</span>
+  </div>
+  <div class="strip-stat reveal">
+    <span class="strip-num">50%</span>
+    <span class="strip-label">of adolescent females are unhappy with their bodies</span>
+  </div>
+  <div class="strip-stat reveal">
+    <span class="strip-num">26</span>
+    <span class="strip-label">international studies confirm social media harms body image</span>
+  </div>
+</div>
+
+<!-- BOTTOM CTA -->
+<div class="bottom-cta">
+  <h2>You are not <em>alone.</em></h2>
+  <p>If any of this resonates with you — or someone you know — reaching out is the bravest thing you can do. Our campaign is here to listen.</p>
+  <div class="cta-btns">
+    <a href="index.html#contact" class="btn-dark">Get in Touch</a>
+    <a href="index.html#posters" class="btn-ghost">See the Posters</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">Speak<span>Kind</span></div>
+  <p>© 2026 SpeakKind Campaign · Mulund West, Mumbai</p>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx - 6 + 'px';
+    cursor.style.top = my - 6 + 'px';
+  });
+  function animRing() {
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx - 18 + 'px'; ring.style.top = ry - 18 + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+
+  // Reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80);
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => obs.observe(el));
+
+  // Filter
+  function filterCards(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.article-card').forEach(card => {
+      if (cat === 'all' || card.dataset.cat === cat) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+    // Hide/show category labels
+    document.querySelectorAll('.category-label').forEach(label => {
+      label.style.display = cat === 'all' ? 'flex' : 'none';
+    });
+  }
+</script>
+</body>
+</html>  
+
 <script>
 
 /* ================= FORM ================= */
